@@ -3,190 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Rest | خوارنگەها تەکنیک</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Tech Ai Restaurant Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root {
-            --primary: #e67e22;
-            --dark: #2c3e50;
-            --light: #f4f4f4;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0; padding: 0;
-            background-color: var(--light);
-            color: var(--dark);
+            font-family: 'Poppins', 'Tahoma', sans-serif;
+            background-color: #0f172a;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
         }
 
         header {
-            background-color: var(--dark);
-            color: white;
-            padding: 20px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-bottom: 2px solid #38bdf8;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            margin-top: 10px;
+            opacity: 0.8;
         }
 
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 10px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* لاپەرێ سەرەکی */
-        .main-menu {
+        .menu-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        .category-card {
-            background: white;
-            border-radius: 15px;
+        .food-card {
+            background: #1e293b;
+            border-radius: 20px;
             overflow: hidden;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .category-card:hover { transform: translateY(-5px); }
-
-        .category-card img { width: 100%; height: 150px; object-fit: cover; }
-
-        .category-card h3 { padding: 10px; margin: 0; }
-
-        /* لاپەرێ خوارنان */
-        .food-list { display: none; }
-
-        .food-item {
-            background: white;
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        .food-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+            border-color: #38bdf8;
         }
 
-        .food-item img {
-            width: 80px; height: 80px;
-            border-radius: 10px;
+        .food-img {
+            width: 100%;
+            height: 200px;
             object-fit: cover;
-            margin-left: 15px;
         }
 
-        .food-info { flex-grow: 1; }
-        .food-info h4 { margin: 0 0 5px 0; color: var(--primary); }
-        .price { font-weight: bold; color: #27ae60; }
-
-        .back-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 15px;
+        .food-info {
+            padding: 20px;
+            text-align: center;
         }
 
+        .food-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+
+        .food-price {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            font-weight: 700;
+            background: rgba(56, 189, 248, 0.1);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 50px;
+        }
+
+        #loader {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 50px;
+            color: #38bdf8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Tech Rest</h1>
-    <p>ب خیر بێن بۆ تاموچێژا تەکنیکی</p>
-</header>
+    <header>
+        <h1>Tech Ai Restaurant</h1>
+        <p>ب خێر بێی بۆ خۆشترین خوارنێن مە</p>
+    </header>
 
-<div class="container">
-    
-    <div id="home" class="main-menu">
-        <div class="category-card" onclick="showCategory('pizza')">
-            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" alt="پیتزا">
-            <h3>پیتزا</h3>
-        </div>
-        <div class="category-card" onclick="showCategory('kada')">
-            <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=400&q=80" alt="کادە">
-            <h3>کادە</h3>
-        </div>
+    <div class="container">
+        <div id="loader"><i class="fas fa-spinner fa-spin"></i> ل هیڤیا بارکرنا خوارنان بە...</div>
+        <div class="menu-grid" id="menu-container"></div>
     </div>
 
-    <div id="pizza" class="food-list">
-        <button class="back-btn" onclick="showHome()"><i class="fas fa-arrow-right"></i> ڤەگەر بۆ سەرەکی</button>
-        <h3>جورێن پیتزایێ</h3>
-        
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1574071318508-1cdbad80ad50?w=200" alt="Pizza">
-            <div class="food-info">
-                <h4>پیتزا ئیتالی</h4>
-                <div class="price">٥,٠٠٠ دینار</div>
-            </div>
-        </div>
+    <footer>
+        &copy; 2026 Tech Ai - هەمی ماف د پاراستینە
+    </footer>
 
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1628840042765-356cda07504e?w=200" alt="Pizza">
-            <div class="food-info">
-                <h4>پیتزا پێپەرۆنی</h4>
-                <div class="price">٥,٠٠٠ دینار</div>
-            </div>
-        </div>
+    <script>
+        // لێنکێ تە یێ CSV یێ گوگل شیت
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTSRjwZs-DPmh8Cg7LwOa1HTa8m58e4LriIPHbkoxdNp-vcgkNHHsVnp89Dj_TE7xiDLMugKBJRtsBr/pub?output=csv';
 
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200" alt="Pizza">
-            <div class="food-info">
-                <h4>پیتزا فاهیتا</h4>
-                <div class="price">٥,٠٠٠ دینار</div>
-            </div>
-        </div>
-        
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1598177090164-83950673e44c?w=200" alt="Pizza">
-            <div class="food-info">
-                <h4>پیتزا ماسی</h4>
-                <div class="price">٧,٠٠٠ دینار</div>
-            </div>
-        </div>
-    </div>
+        async function loadMenu() {
+            try {
+                const response = await fetch(csvUrl);
+                const data = await response.text();
+                
+                // پارچەکرنا داتایان ب ڕێکا ڕێزکان
+                const rows = data.split('\n').slice(1); 
+                const menuContainer = document.getElementById('menu-container');
+                const loader = document.getElementById('loader');
 
-    <div id="kada" class="food-list">
-        <button class="back-btn" onclick="showHome()"><i class="fas fa-arrow-right"></i> ڤەگەر بۆ سەرەکی</button>
-        <h3>جورێن کادەیێ</h3>
-        
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=200" alt="Kada">
-            <div class="food-info">
-                <h4>کادا پەنێری</h4>
-                <div class="price">٤,٠٠٠ دینار</div>
-            </div>
-        </div>
+                loader.style.display = 'none';
 
-        <div class="food-item">
-            <img src="https://images.unsplash.com/photo-1603532648955-0393e01c8f3d?w=200" alt="Kada">
-            <div class="food-info">
-                <h4>کادا گوشتی</h4>
-                <div class="price">٥,٠٠٠ دینار</div>
-            </div>
-        </div>
-    </div>
+                rows.forEach(row => {
+                    const columns = row.split(',');
+                    if (columns.length >= 3) {
+                        const name = columns[0].trim();
+                        const price = columns[1].trim();
+                        const imageUrl = columns[2].trim();
 
-</div>
+                        if (name && price && imageUrl) {
+                            const card = `
+                                <div class="food-card">
+                                    <img src="${imageUrl}" class="food-img" alt="${name}">
+                                    <div class="food-info">
+                                        <div class="food-name">${name}</div>
+                                        <div class="food-price">${price} IQD</div>
+                                    </div>
+                                </div>
+                            `;
+                            menuContainer.innerHTML += card;
+                        }
+                    }
+                });
+            } catch (error) {
+                document.getElementById('loader').innerHTML = "کێشەیەک د بارکرنا داتایان دا هەیە.";
+                console.error("Error fetching data:", error);
+            }
+        }
 
-<script>
-    function showCategory(id) {
-        document.getElementById('home').style.display = 'none';
-        document.getElementById('pizza').style.display = 'none';
-        document.getElementById('kada').style.display = 'none';
-        
-        document.getElementById(id).style.display = 'block';
-    }
-
-    function showHome() {
-        document.getElementById('home').style.display = 'grid';
-        document.getElementById('pizza').style.display = 'none';
-        document.getElementById('kada').style.display = 'none';
-    }
-</script>
-
+        // دەستپێکرنا بارکرنا مینیۆیێ
+        loadMenu();
+    </script>
 </body>
 </html>
