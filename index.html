@@ -8,122 +8,184 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
 
+        :root {
+            --primary-color: #38bdf8;
+            --bg-dark: #020617;
+            --card-bg: rgba(30, 41, 59, 0.7);
+        }
+
         body {
             font-family: 'Poppins', 'Tahoma', sans-serif;
-            background-color: #0f172a;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
             color: #ffffff;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* بازنەیێن جوولەدار ل پاشبنەمای */
+        body::before, body::after {
+            content: "";
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            filter: blur(100px);
+            opacity: 0.1;
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+        body::after {
+            background: #8b5cf6;
+            right: 0;
+            bottom: 0;
+            animation-delay: -10s;
+        }
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
         }
 
         header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 40px 20px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 50px 20px;
             text-align: center;
-            border-bottom: 2px solid #38bdf8;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
-            color: #38bdf8;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 3rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            letter-spacing: 3px;
         }
 
+        header h1 span { color: var(--primary-color); }
+
         header p {
-            margin-top: 10px;
-            opacity: 0.8;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            color: #94a3b8;
         }
 
         .container {
             max-width: 1200px;
-            margin: 40px auto;
+            margin: 50px auto;
             padding: 0 20px;
         }
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 35px;
         }
 
         .food-card {
-            background: #1e293b;
-            border-radius: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
 
         .food-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
-            border-color: #38bdf8;
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .img-container {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
         }
 
         .food-img {
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .food-card:hover .food-img {
+            transform: scale(1.1);
         }
 
         .food-info {
-            padding: 20px;
+            padding: 25px;
             text-align: center;
         }
 
         .food-name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #f8fafc;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
         }
 
-        .food-price {
-            font-size: 1.2rem;
-            color: #38bdf8;
-            font-weight: 700;
-            background: rgba(56, 189, 248, 0.1);
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 50px;
+        .price-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(90deg, var(--primary-color), #0ea5e9);
+            color: #000;
+            font-weight: 800;
+            padding: 8px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
         }
 
         #loader {
             text-align: center;
-            font-size: 1.5rem;
-            margin-top: 50px;
-            color: #38bdf8;
+            font-size: 1.8rem;
+            margin-top: 100px;
+            color: var(--primary-color);
         }
 
         footer {
             text-align: center;
-            padding: 40px;
-            opacity: 0.6;
-            font-size: 0.9rem;
+            padding: 60px;
+            color: #64748b;
+            font-size: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Tech Ai Restaurant</h1>
-        <p>ب خێر بێی بۆ خۆشترین خوارنێن مە</p>
+        <h1>TECH <span>AI</span> RESTAURANT</h1>
+        <p>تامی نوی دگەل تەکنۆلۆژیایا زیرەک</p>
     </header>
 
     <div class="container">
-        <div id="loader"><i class="fas fa-spinner fa-spin"></i> ل هیڤیا بارکرنا خوارنان بە...</div>
+        <div id="loader">
+            <i class="fas fa-circle-notch fa-spin"></i><br>
+            <span style="font-size: 1rem; margin-top: 10px; display: block;">ل هیڤیا تشتێن خۆش بە...</span>
+        </div>
         <div class="menu-grid" id="menu-container"></div>
     </div>
 
     <footer>
-        &copy; 2026 Tech Ai - هەمی ماف د پاراستینە
+        <p>&copy; 2026 Tech Ai - زاخۆ، شقا</p>
     </footer>
 
     <script>
-        // لێنکێ تە یێ CSV یێ گوگل شیت
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTSRjwZs-DPmh8Cg7LwOa1HTa8m58e4LriIPHbkoxdNp-vcgkNHHsVnp89Dj_TE7xiDLMugKBJRtsBr/pub?output=csv';
 
         async function loadMenu() {
@@ -131,7 +193,7 @@
                 const response = await fetch(csvUrl);
                 const data = await response.text();
                 
-                // پارچەکرنا داتایان ب ڕێکا ڕێزکان
+                // پاقژکرنا داتایان ژ نیشانێن زێدە
                 const rows = data.split('\n').slice(1); 
                 const menuContainer = document.getElementById('menu-container');
                 const loader = document.getElementById('loader');
@@ -139,19 +201,21 @@
                 loader.style.display = 'none';
 
                 rows.forEach(row => {
-                    const columns = row.split(',');
+                    const columns = row.split(',').map(col => col.replace(/"/g, '').trim());
                     if (columns.length >= 3) {
-                        const name = columns[0].trim();
-                        const price = columns[1].trim();
-                        const imageUrl = columns[2].trim();
+                        const name = columns[0];
+                        const price = columns[1];
+                        const imageUrl = columns[2];
 
-                        if (name && price && imageUrl) {
+                        if (name && imageUrl) {
                             const card = `
                                 <div class="food-card">
-                                    <img src="${imageUrl}" class="food-img" alt="${name}">
+                                    <div class="img-container">
+                                        <img src="${imageUrl}" class="food-img" alt="${name}" onerror="this.src='https://via.placeholder.com/400x300?text=Food+Image'">
+                                    </div>
                                     <div class="food-info">
                                         <div class="food-name">${name}</div>
-                                        <div class="food-price">${price} IQD</div>
+                                        <div class="price-tag">${price} IQD</div>
                                     </div>
                                 </div>
                             `;
@@ -160,12 +224,10 @@
                     }
                 });
             } catch (error) {
-                document.getElementById('loader').innerHTML = "کێشەیەک د بارکرنا داتایان دا هەیە.";
-                console.error("Error fetching data:", error);
+                document.getElementById('loader').innerHTML = "ببوورە، کێشەیەک د بارکرنا لیستا خوارنێ دا هەیە.";
             }
         }
 
-        // دەستپێکرنا بارکرنا مینیۆیێ
         loadMenu();
     </script>
 </body>
