@@ -6,31 +6,148 @@
     <title>Tech Ai Restaurant</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
-        :root { --primary: #38bdf8; --bg: #020617; --card: rgba(30, 41, 59, 0.7); }
-        body { font-family: 'Poppins', 'Tahoma', sans-serif; background-color: var(--bg); color: #fff; margin: 0; text-align: center; overflow-x: hidden; }
-        header { padding: 40px 20px; background: linear-gradient(to bottom, #0f172a, var(--bg)); border-bottom: 1px solid rgba(56, 189, 248, 0.2); }
-        .container { max-width: 1100px; margin: auto; padding: 20px; min-height: 60vh; }
-
-        /* لاپەڕێ دەستپێکێ - تەنێ بەش */
-        #catGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .cat-card { position: relative; height: 250px; border-radius: 25px; overflow: hidden; cursor: pointer; border: 2px solid rgba(56, 189, 248, 0.2); transition: 0.4s; }
-        .cat-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(56, 189, 248, 0.3); }
-        .cat-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; z-index: 1; top:0; left:0; }
-        .cat-overlay { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); }
-        .cat-overlay i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; }
-        .cat-overlay h3 { font-size: 1.8rem; margin: 0; }
-
-        /* بەشێ خوارنان */
-        #foodSection { display: none; }
-        .food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .food-item { background: var(--card); border-radius: 25px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .food-img { width: 100%; height: 200px; object-fit: cover; }
-        .food-info { padding: 20px; }
-        .food-price { background: var(--primary); color: #000; padding: 5px 15px; border-radius: 10px; font-weight: bold; display: inline-block; margin-top: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap');
         
-        .back-btn { background: var(--primary); color: #000; border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer; margin-bottom: 30px; font-weight: bold; font-size: 1.1rem; }
-        #loader { font-size: 1.5rem; color: var(--primary); margin-top: 50px; }
+        :root { 
+            --primary: #38bdf8; 
+            --accent: #818cf8;
+            --bg: #020617; 
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body { 
+            font-family: 'Poppins', 'Noto Sans Arabic', sans-serif; 
+            background: radial-gradient(circle at top right, #0f172a, #020617);
+            color: #fff; 
+            margin: 0; 
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Elements */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10%; left: -10%;
+            width: 40%; height: 40%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent);
+            filter: blur(100px);
+            z-index: -1;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(50%, 50%); } }
+
+        header { 
+            padding: 60px 20px; 
+            text-align: center;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        header h1 { 
+            font-size: 2.5rem; 
+            margin: 0; 
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 20px; }
+
+        /* Categories Grid */
+        #catGrid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: 20px; 
+            margin-top: 30px; 
+        }
+
+        .cat-card { 
+            position: relative; 
+            height: 200px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            cursor: pointer; 
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .cat-card:hover { 
+            transform: scale(1.05); 
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+        }
+
+        .cat-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
+        .cat-card:hover .cat-bg { transform: scale(1.1); opacity: 0.9; }
+
+        .cat-overlay { 
+            position: relative; z-index: 2; height: 100%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+        }
+
+        .cat-overlay h3 { font-size: 1.4rem; margin: 10px 0 0; font-weight: 700; }
+
+        /* Food Items Styling */
+        #foodSection { display: none; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .food-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .food-item { 
+            background: var(--glass); 
+            backdrop-filter: blur(15px);
+            border-radius: 25px; 
+            overflow: hidden; 
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .food-item:hover { border-color: var(--primary); transform: translateY(-5px); }
+
+        .food-img { width: 100%; height: 200px; object-fit: cover; }
+        .food-info { padding: 20px; text-align: right; }
+        .food-info h3 { margin: 0; font-size: 1.2rem; color: #f8fafc; }
+
+        .food-price { 
+            background: linear-gradient(135deg, var(--primary), var(--accent)); 
+            color: #000; padding: 6px 18px; 
+            border-radius: 50px; font-weight: 700; 
+            display: inline-block; margin-top: 15px; 
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .back-btn { 
+            background: var(--glass); 
+            color: var(--primary); 
+            border: 1px solid var(--primary); 
+            padding: 10px 20px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            margin-bottom: 30px; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: var(--primary); color: #000; }
+
+        #loader { font-size: 1.5rem; color: var(--primary); margin-top: 100px; }
+
+        /* Mobile Specific Adjustments */
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .cat-card { height: 160px; }
+            #catGrid { grid-template-columns: 1fr 1fr; } /* Two columns on mobile */
+            .food-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -41,17 +158,20 @@
 </header>
 
 <div class="container">
-    <div id="loader"><i class="fas fa-spinner fa-spin"></i> ل هیڤیا بارکرنێ بە...</div>
+    <div id="loader"><i class="fas fa-circle-notch fa-spin"></i> ل هیڤیا تشتێن خۆش بە...</div>
+    
     <div id="catGrid"></div>
+
     <div id="foodSection">
-        <button class="back-btn" onclick="showCats()"><i class="fas fa-arrow-right"></i> ڤەگەر بۆ سەرەکی</button>
-        <h2 id="currentCatTitle" style="color: var(--primary); margin-bottom: 30px;"></h2>
+        <button class="back-btn" onclick="showCats()">
+            <i class="fas fa-chevron-right"></i> ڤەگەر بۆ سەرەکی
+        </button>
+        <h2 id="currentCatTitle" style="color: var(--primary); margin-bottom: 30px; text-align: right;"></h2>
         <div class="food-grid" id="foodGrid"></div>
     </div>
 </div>
 
 <script>
-    // لێنکێ CSV یێ تە یێ فەرمی
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTSRjwZs-DPmh8Cg7LwOa1HTa8m58e4LriIPHbkoxdNp-vcgkNHHsVnp89Dj_TE7xiDLMugKBJRtsBr/pub?output=csv';
     let dataList = [];
 
@@ -63,13 +183,14 @@
             
             dataList = rows.map(r => {
                 const c = r.split(',').map(v => v.replace(/"/g, '').trim());
-                return { name: c[0], price: c[1], img: c[2], cat: c[3], catImg: c[4] };
+                // ڕێزبەندی ل دێف خشتەیێ تە: Category (A), CatImg (B), Name (C), Price (D), FoodImg (E)
+                return { cat: c[0], catImg: c[1], name: c[2], price: c[3], img: c[4] };
             }).filter(item => item.name && item.cat);
 
             document.getElementById('loader').style.display = 'none';
             renderCategories();
         } catch(e) { 
-            document.getElementById('loader').innerText = "کێشەیەک د بارکرنێ دا هەیە.";
+            document.getElementById('loader').innerText = "هێڵا ئینتەرنێتێ یا لاوازە...";
         }
     }
 
@@ -80,14 +201,13 @@
         
         const categories = [...new Set(dataList.map(item => item.cat))];
         catGrid.innerHTML = '';
+        
         categories.forEach(cat => {
             const item = dataList.find(i => i.cat === cat);
-            const icon = cat.includes('بيتزا') ? 'fa-pizza-slice' : (cat.includes('شاورمه') ? 'fa-hamburger' : 'fa-drumstick-bite');
             catGrid.innerHTML += `
                 <div class="cat-card" onclick="openCat('${cat}')">
                     <img src="${item.catImg}" class="cat-bg">
                     <div class="cat-overlay">
-                        <i class="fas ${icon}"></i>
                         <h3>${cat}</h3>
                     </div>
                 </div>`;
@@ -97,11 +217,12 @@
     function openCat(catName) {
         document.getElementById('catGrid').style.display = 'none';
         document.getElementById('foodSection').style.display = 'block';
-        document.getElementById('currentCatTitle').innerText = "بەشێ: " + catName;
+        document.getElementById('currentCatTitle').innerText = "بەشێ " + catName;
         
         const grid = document.getElementById('foodGrid');
         grid.innerHTML = '';
         const filtered = dataList.filter(item => item.cat === catName);
+        
         filtered.forEach(item => {
             grid.innerHTML += `
                 <div class="food-item">
@@ -112,7 +233,7 @@
                     </div>
                 </div>`;
         });
-        window.scrollTo(0,0);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function showCats() {
