@@ -10,143 +10,102 @@
         
         :root { 
             --primary: #38bdf8; 
-            --accent: #818cf8;
             --bg: #020617; 
-            --glass: rgba(255, 255, 255, 0.05);
+            --glass: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body { 
             font-family: 'Poppins', 'Noto Sans Arabic', sans-serif; 
-            background: radial-gradient(circle at top right, #0f172a, #020617);
+            background: radial-gradient(circle at 50% 0%, #0f172a, #020617);
             color: #fff; 
             margin: 0; 
             min-height: 100vh;
-            overflow-x: hidden;
         }
-
-        /* Animated Background Elements */
-        body::before {
-            content: "";
-            position: fixed;
-            top: -10%; left: -10%;
-            width: 40%; height: 40%;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.15), transparent);
-            filter: blur(100px);
-            z-index: -1;
-            animation: move 20s infinite alternate;
-        }
-
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(50%, 50%); } }
 
         header { 
-            padding: 60px 20px; 
+            padding: 50px 20px; 
             text-align: center;
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(10px);
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
         }
 
         header h1 { 
-            font-size: 2.5rem; 
+            font-size: 2.2rem; 
             margin: 0; 
-            letter-spacing: 2px;
             background: linear-gradient(to right, #38bdf8, #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
         }
 
         .container { max-width: 1200px; margin: auto; padding: 20px; }
 
-        /* Categories Grid */
+        /* Categories */
         #catGrid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
-            gap: 20px; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
             margin-top: 30px; 
         }
 
         .cat-card { 
             position: relative; 
-            height: 200px; 
+            height: 180px; 
             border-radius: 20px; 
             overflow: hidden; 
             cursor: pointer; 
             border: 1px solid var(--glass-border);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s;
         }
 
-        .cat-card:hover { 
-            transform: scale(1.05); 
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
-        }
-
-        .cat-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.5s; }
-        .cat-card:hover .cat-bg { transform: scale(1.1); opacity: 0.9; }
-
+        .cat-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .cat-bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
         .cat-overlay { 
             position: relative; z-index: 2; height: 100%; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.4); 
         }
+        .cat-overlay h3 { font-size: 1.3rem; text-shadow: 2px 2px 10px #000; }
 
-        .cat-overlay h3 { font-size: 1.4rem; margin: 10px 0 0; font-weight: 700; }
-
-        /* Food Items Styling */
-        #foodSection { display: none; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
+        /* Food Items */
+        #foodSection { display: none; }
         .food-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 25px; 
+            gap: 20px; 
         }
 
         .food-item { 
             background: var(--glass); 
-            backdrop-filter: blur(15px);
-            border-radius: 25px; 
+            backdrop-filter: blur(10px);
+            border-radius: 20px; 
             overflow: hidden; 
             border: 1px solid var(--glass-border);
-            transition: 0.3s;
         }
 
-        .food-item:hover { border-color: var(--primary); transform: translateY(-5px); }
-
         .food-img { width: 100%; height: 200px; object-fit: cover; }
-        .food-info { padding: 20px; text-align: right; }
-        .food-info h3 { margin: 0; font-size: 1.2rem; color: #f8fafc; }
-
+        .food-info { padding: 15px; text-align: right; }
+        .food-info h3 { margin: 0; font-size: 1.1rem; }
         .food-price { 
-            background: linear-gradient(135deg, var(--primary), var(--accent)); 
-            color: #000; padding: 6px 18px; 
-            border-radius: 50px; font-weight: 700; 
-            display: inline-block; margin-top: 15px; 
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+            background: var(--primary); 
+            color: #000; padding: 4px 12px; 
+            border-radius: 8px; font-weight: 700; 
+            display: inline-block; margin-top: 10px; 
         }
 
         .back-btn { 
-            background: var(--glass); 
-            color: var(--primary); 
+            background: none; color: var(--primary); 
             border: 1px solid var(--primary); 
-            padding: 10px 20px; 
-            border-radius: 50px; 
-            cursor: pointer; 
-            margin-bottom: 30px; 
-            font-weight: bold;
-            transition: 0.3s;
+            padding: 8px 20px; border-radius: 50px; 
+            cursor: pointer; margin-bottom: 20px;
         }
-        .back-btn:hover { background: var(--primary); color: #000; }
 
-        #loader { font-size: 1.5rem; color: var(--primary); margin-top: 100px; }
+        #loader { margin-top: 100px; font-size: 1.2rem; color: var(--primary); }
 
-        /* Mobile Specific Adjustments */
         @media (max-width: 600px) {
-            header h1 { font-size: 1.8rem; }
-            .cat-card { height: 160px; }
-            #catGrid { grid-template-columns: 1fr 1fr; } /* Two columns on mobile */
-            .food-grid { grid-template-columns: 1fr; }
+            #catGrid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -154,19 +113,15 @@
 
 <header>
     <h1>TECH AI RESTAURANT</h1>
-    <p>زاخۆ - ب سەرپەرشتیا فەلاح محی الدین</p>
+    <p>زاخۆ - دیزاینێ فەلاح محی الدین</p>
 </header>
 
 <div class="container">
-    <div id="loader"><i class="fas fa-circle-notch fa-spin"></i> ل هیڤیا تشتێن خۆش بە...</div>
-    
+    <div id="loader"><i class="fas fa-spinner fa-spin"></i> ل هیڤیا بارکرنێ بە...</div>
     <div id="catGrid"></div>
-
     <div id="foodSection">
-        <button class="back-btn" onclick="showCats()">
-            <i class="fas fa-chevron-right"></i> ڤەگەر بۆ سەرەکی
-        </button>
-        <h2 id="currentCatTitle" style="color: var(--primary); margin-bottom: 30px; text-align: right;"></h2>
+        <button class="back-btn" onclick="showCats()"><i class="fas fa-arrow-right"></i> ڤەگەر</button>
+        <h2 id="currentCatTitle" style="color: var(--primary); text-align: right;"></h2>
         <div class="food-grid" id="foodGrid"></div>
     </div>
 </div>
@@ -182,15 +137,21 @@
             const rows = txt.split('\n').slice(1);
             
             dataList = rows.map(r => {
-                const c = r.split(',').map(v => v.replace(/"/g, '').trim());
-                // ڕێزبەندی ل دێف خشتەیێ تە: Category (A), CatImg (B), Name (C), Price (D), FoodImg (E)
-                return { cat: c[0], catImg: c[1], name: c[2], price: c[3], img: c[4] };
-            }).filter(item => item.name && item.cat);
+                // پاکژکرنا داتایان ژ فاریزێن زێدە
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g, '').trim());
+                return { 
+                    cat: c[0],     // Category
+                    catImg: c[1],  // CatImage
+                    name: c[2],    // Name
+                    price: c[3],   // Price
+                    img: c[4]      // Image
+                };
+            }).filter(item => item.cat && item.name);
 
             document.getElementById('loader').style.display = 'none';
             renderCategories();
         } catch(e) { 
-            document.getElementById('loader').innerText = "هێڵا ئینتەرنێتێ یا لاوازە...";
+            document.getElementById('loader').innerText = "کێشەیەک د هێڵێ دا هەیە.";
         }
     }
 
@@ -207,9 +168,7 @@
             catGrid.innerHTML += `
                 <div class="cat-card" onclick="openCat('${cat}')">
                     <img src="${item.catImg}" class="cat-bg">
-                    <div class="cat-overlay">
-                        <h3>${cat}</h3>
-                    </div>
+                    <div class="cat-overlay"><h3>${cat}</h3></div>
                 </div>`;
         });
     }
@@ -233,7 +192,7 @@
                     </div>
                 </div>`;
         });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0,0);
     }
 
     function showCats() {
