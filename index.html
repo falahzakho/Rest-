@@ -31,7 +31,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Top Navigation */
         .top-nav {
             display: flex;
             gap: 10px;
@@ -70,14 +69,9 @@
             border-radius: 50%;
         }
 
-        header {
-            padding: 80px 20px 20px;
-            text-align: center;
-        }
-
+        header { padding: 80px 20px 20px; text-align: center; }
         header h1 { font-size: 2.5rem; color: var(--primary); font-weight: 900; margin: 0; }
 
-        /* Grid & Cards */
         .food-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .food-card {
             background: var(--card-bg);
@@ -108,7 +102,6 @@
         .food-info { padding: 12px; text-align: center; }
         .price-tag { background: var(--accent); color: #000; padding: 4px 10px; border-radius: 12px; font-weight: 900; }
 
-        /* Cart Panel Fixes */
         #cart-panel {
             position: fixed;
             top: 0;
@@ -128,13 +121,7 @@
         [dir="ltr"] #cart-panel.open { left: 0; }
         [dir="rtl"] #cart-panel.open { right: 0; }
 
-        #cart-list {
-            flex-grow: 1;
-            overflow-y: auto; /* ئەڤە کێشەیا سکرۆلێ چارەسەر دکەت */
-            margin-top: 15px;
-            padding-bottom: 20px;
-        }
-
+        #cart-list { flex-grow: 1; overflow-y: auto; margin-top: 15px; padding-bottom: 20px; }
         .cart-item {
             display: flex;
             justify-content: space-between;
@@ -145,27 +132,14 @@
             margin-bottom: 10px;
         }
 
-        /* Checkout Styles */
         .checkout-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--accent);
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            font-weight: 900;
-            margin-top: 10px;
-            cursor: pointer;
+            width: 100%; padding: 15px; background: var(--accent); color: #000;
+            border: none; border-radius: 10px; font-weight: 900; margin-top: 10px; cursor: pointer;
         }
 
         .input-field {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #0f172a;
-            color: white;
+            width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px;
+            border: 1px solid #444; background: #0f172a; color: white;
         }
 
         .categories-container { 
@@ -258,14 +232,24 @@
     };
 
     async function loadData() {
-        const res = await fetch(csvUrl);
-        const txt = await res.text();
-        const rows = txt.split('\n').slice(1);
-        dataList = rows.map(r => {
-            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g, '').trim());
-            return { name_en: c[0], price: c[1], img: c[2], cat: c[3], name_ku: c[4] || c[0], name_ar: c[5] || c[0] };
-        }).filter(i => i.cat);
-        setLang('ku');
+        try {
+            const res = await fetch(csvUrl);
+            const txt = await res.text();
+            const rows = txt.split('\n').slice(1);
+            dataList = rows.map(r => {
+                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g, '').trim());
+                if(c.length < 4) return null;
+                return { 
+                    name_en: c[0], 
+                    price: c[1], 
+                    img: c[2], 
+                    cat: c[3], 
+                    name_ku: c[4] || c[0], 
+                    name_ar: c[5] || c[0] 
+                };
+            }).filter(i => i && i.cat);
+            setLang('ku');
+        } catch (e) { console.error("CSV Load Error:", e); }
     }
 
     function setLang(l) {
@@ -279,6 +263,7 @@
         const catBar = document.getElementById('catBar');
         const menuContent = document.getElementById('menuContent');
         catBar.innerHTML = ''; menuContent.innerHTML = '';
+        
         const cats = [...new Set(dataList.map(i => i.cat))];
         cats.forEach((cat, index) => {
             const btn = document.createElement('div');
@@ -286,17 +271,26 @@
             btn.innerText = cat;
             btn.onclick = () => switchCat(cat, btn);
             catBar.appendChild(btn);
+
             const section = document.createElement('div');
             section.id = `section-${cat}`;
             section.className = `menu-section ${index === 0 ? 'active' : ''}`;
             const grid = document.createElement('div');
             grid.className = 'food-grid';
+            
             dataList.filter(f => f.cat === cat).forEach(food => {
                 const card = document.createElement('div');
                 card.className = 'food-card';
-                card.innerHTML = `<button class="add-btn" onclick="addToCart('${food.name_en}')"><i class="fas fa-plus"></i></button>
+                // ڕاستکرنا ناڤێ ستوونێ ب لایەنێ زمانێ هەلبژارتی
+                const displayName = currentLang === 'en' ? food.name_en : (currentLang === 'ku' ? food.name_ku : food.name_ar);
+                
+                card.innerHTML = `
+                    <button class="add-btn" onclick="addToCart('${food.name_en.replace(/'/g, "\\'")}')"><i class="fas fa-plus"></i></button>
                     <div class="food-img" style="background-image: url('${food.img}')"></div>
-                    <div class="food-info"><h3>${food[`name_${currentLang}`]}</h3><span class="price-tag">${food.price}</span></div>`;
+                    <div class="food-info">
+                        <h3>${displayName}</h3>
+                        <span class="price-tag">${food.price}</span>
+                    </div>`;
                 grid.appendChild(card);
             });
             section.appendChild(grid);
@@ -311,7 +305,6 @@
         document.getElementById(`section-${cat}`).classList.add('active');
     }
 
-    // --- کێشەیا دووبارەبوونێ لێرە چارەسەر بوو ---
     function addToCart(nameEn) {
         const item = dataList.find(i => i.name_en === nameEn);
         const exist = cart.find(i => i.name_en === nameEn);
@@ -328,17 +321,20 @@
         const form = document.getElementById('checkout-form');
 
         count.innerText = cart.reduce((s, i) => s + i.qty, 0);
-        list.innerHTML = cart.length === 0 ? `<p style="text-align:center">ڤالایە</p>` : '';
+        list.innerHTML = cart.length === 0 ? `<p style="text-align:center">${translations[currentLang].empty}</p>` : '';
         form.style.display = cart.length > 0 ? 'block' : 'none';
 
         let total = 0;
         cart.forEach((item, index) => {
             const p = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
             total += (p * item.qty);
+            const displayName = currentLang === 'en' ? item.name_en : (currentLang === 'ku' ? item.name_ku : item.name_ar);
+            
             const div = document.createElement('div');
             div.className = 'cart-item';
-            div.innerHTML = `<span>${item[`name_${currentLang}`]} (x${item.qty})</span>
-                <span>${(p * item.qty).toLocaleString()} <i class="fas fa-trash" onclick="removeFromCart(${index})" style="color:red; margin-left:10px"></i></span>`;
+            div.innerHTML = `
+                <span>${displayName} (x${item.qty})</span>
+                <span>${(p * item.qty).toLocaleString()} <i class="fas fa-trash" onclick="removeFromCart(${index})" style="color:red; margin-left:10px; cursor:pointer"></i></span>`;
             list.appendChild(div);
         });
         priceEl.innerText = total.toLocaleString() + " IQD";
@@ -348,20 +344,29 @@
         serviceType = t;
         document.getElementById('fields-outside').style.display = t === 'outside' ? 'block' : 'none';
         document.getElementById('fields-inside').style.display = t === 'inside' ? 'block' : 'none';
-        document.getElementById('btn-out').style.background = t === 'outside' ? 'var(--primary)' : '#333';
-        document.getElementById('btn-in').style.background = t === 'inside' ? 'var(--primary)' : '#333';
+        document.getElementById('btn-out').style.backgroundColor = t === 'outside' ? 'var(--primary)' : 'rgba(255,255,255,0.1)';
+        document.getElementById('btn-in').style.backgroundColor = t === 'inside' ? 'var(--primary)' : 'rgba(255,255,255,0.1)';
     }
 
     function sendToFirebase() {
         if (!serviceType) return alert("جۆرێ خزمەتێ هەلبژێرە");
         const order = {
-            items: cart,
+            items: cart.map(i => ({ 
+                name: currentLang === 'en' ? i.name_en : (currentLang === 'ku' ? i.name_ku : i.name_ar),
+                qty: i.qty,
+                price: i.price 
+            })),
             total: document.getElementById('total-price').innerText,
             type: serviceType,
             details: serviceType === 'inside' ? { table: document.getElementById('table').value } : { addr: document.getElementById('addr').value, phone: document.getElementById('phone').value },
             time: new Date().toLocaleTimeString()
         };
-        db.ref('orders').push(order).then(() => { alert("گەهشتە کاشێری!"); cart = []; updateCartUI(); toggleCart(); });
+        db.ref('orders').push(order).then(() => { 
+            alert("گەهشتە کاشێری!"); 
+            cart = []; 
+            updateCartUI(); 
+            toggleCart(); 
+        });
     }
 
     function toggleCart() { document.getElementById('cart-panel').classList.toggle('open'); }
