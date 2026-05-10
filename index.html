@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="en" dir="ltr" id="mainHtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Rest | Premium Menu</title>
+    <title>Tech Rest | Modern Menu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
@@ -11,222 +11,361 @@
         :root {
             --primary: #38bdf8;
             --accent: #fbbf24;
-            --bg-dark: #020617;
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.12);
+            --card-bg: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Noto Sans Arabic', sans-serif;
-            background: linear-gradient(rgba(2, 6, 23, 0.85), rgba(2, 6, 23, 0.9)), 
-                        url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=2074&auto=format&fit=crop');
+            margin: 0;
+            padding-bottom: 50px;
+            min-height: 100vh;
+            color: #fff;
+            background: linear-gradient(rgba(2, 6, 23, 0.8), rgba(2, 6, 23, 0.8)), 
+                        url('https://i.postimg.cc/qRzMnWFV/photo-2026-05-09-18-07-24.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #fff;
-            margin: 0;
-            min-height: 100vh;
+            background-repeat: no-repeat;
         }
 
-        header {
-            padding: 40px 15px;
-            text-align: center;
-            background: transparent; 
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 900;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        header p { font-size: 0.9rem; opacity: 0.8; margin-top: 8px; }
-
-        .container { max-width: 1200px; margin: auto; padding: 20px 12px; }
-
-        /* جۆرێن خارنێ - Grid System */
-        #catGrid, .food-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-
-        .cat-card, .food-card {
-            background: var(--glass);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            position: relative;
-        }
-
-        .cat-card { height: 200px; cursor: pointer; }
-        
-        .cat-img, .food-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.6;
-            transition: 0.5s;
-        }
-
-        .cat-overlay {
+        /* Top Navigation */
+        .top-nav {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
             position: absolute;
-            inset: 0;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        [dir="ltr"] .top-nav { justify-content: flex-start; }
+        [dir="rtl"] .top-nav { justify-content: flex-end; }
+
+        .nav-btn {
+            position: relative;
+            cursor: pointer;
+            background: rgba(56, 189, 248, 0.2);
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.3);
         }
 
-        .cat-overlay h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            border-bottom: 2px solid var(--primary);
-        }
-
-        /* بەشێ زانیاریێن خارنێ */
-        .food-photo { height: 160px; opacity: 1; }
-        .food-info { padding: 12px; text-align: center; }
-        .food-info h3 { margin: 0; font-size: 1rem; font-weight: 700; height: 40px; overflow: hidden; }
-        
-        .price-tag {
-            background: var(--primary);
+        #cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
             color: #000;
-            padding: 4px 12px;
-            border-radius: 10px;
-            font-weight: 800;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-top: 8px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 50%;
         }
 
-        .back-btn {
-            background: transparent;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-            padding: 8px 20px;
-            border-radius: 12px;
+        header {
+            padding: 80px 20px 20px;
+            text-align: center;
+        }
+
+        header h1 { font-size: 2.5rem; color: var(--primary); font-weight: 900; margin: 0; }
+
+        /* Grid & Cards */
+        .food-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+        .food-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .add-btn {
+            position: absolute;
+            top: 10px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            width: 32px; height: 32px;
+            border-radius: 50%;
             cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            z-index: 5;
+        }
+        [dir="ltr"] .add-btn { right: 10px; }
+        [dir="rtl"] .add-btn { left: 10px; }
+
+        .food-img { width: 100%; height: 130px; background-size: cover; background-position: center; }
+        .food-info { padding: 12px; text-align: center; }
+        .price-tag { background: var(--accent); color: #000; padding: 4px 10px; border-radius: 12px; font-weight: 900; }
+
+        /* Cart Panel Fixes */
+        #cart-panel {
+            position: fixed;
+            top: 0;
+            width: 85%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            transition: 0.4s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- گرنگترین بەش: ڕێکخستن بۆ موبایل (2 Items per row) --- */
-        @media (max-width: 600px) {
-            header { padding: 30px 10px; }
-            header h1 { font-size: 1.8rem; }
-            
-            .container { padding: 15px 8px; }
-            
-            #catGrid, .food-grid {
-                grid-template-columns: repeat(2, 1fr); /* دوو دانە د هەر ڕیزەکێ دا */
-                gap: 10px; /* مەسافەیا ناڤبەرا وان کێمتر کر بۆ موبایلێ */
-            }
+        [dir="ltr"] #cart-panel { left: -100%; }
+        [dir="rtl"] #cart-panel { right: -100%; }
+        [dir="ltr"] #cart-panel.open { left: 0; }
+        [dir="rtl"] #cart-panel.open { right: 0; }
 
-            .cat-card { height: 150px; border-radius: 15px; }
-            .cat-overlay h3 { font-size: 1.1rem; }
-            
-            .food-card { border-radius: 15px; }
-            .food-photo { height: 130px; }
-            .food-info { padding: 10px 5px; }
-            .food-info h3 { font-size: 0.9rem; height: 35px; }
-            .price-tag { font-size: 0.75rem; padding: 3px 8px; }
+        #cart-list {
+            flex-grow: 1;
+            overflow-y: auto; /* ئەڤە کێشەیا سکرۆلێ چارەسەر دکەت */
+            margin-top: 15px;
+            padding-bottom: 20px;
         }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Checkout Styles */
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 900;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #0f172a;
+            color: white;
+        }
+
+        .categories-container { 
+            position: sticky; top: 0; z-index: 100; 
+            background: rgba(15, 23, 42, 0.9); 
+            backdrop-filter: blur(15px); padding: 12px 10px; 
+            overflow-x: auto; display: flex; gap: 10px;
+        }
+
+        .cat-btn { padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 50px; cursor: pointer; border: 1px solid var(--glass-border); white-space: nowrap; }
+        .cat-btn.active { background: var(--primary); color: #020617; }
+        
+        .menu-section { display: none; }
+        .menu-section.active { display: block; }
+
+        #lang-modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            z-index: 3000; align-items: center; justify-content: center;
+        }
+        .lang-card { background: #1e293b; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--primary); }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>TECH REST</h1>
-    <p><i class="fas fa-map-marker-alt"></i> زاخۆ - دیزاینێ فەلاح محی الدین</p>
-</header>
-
-<div class="container">
-    <div id="loader" style="text-align:center; padding: 50px;">
-        <i class="fas fa-circle-notch fa-spin fa-2x" style="color: var(--primary);"></i>
+<div class="top-nav">
+    <div class="nav-btn" onclick="toggleCart()">
+        <i class="fas fa-shopping-basket fa-lg" style="color: var(--primary);"></i>
+        <span id="cart-count">0</span>
     </div>
-    
-    <div id="catGrid"></div>
-
-    <div id="foodSection" style="display: none;">
-        <button class="back-btn" onclick="showCats()">
-            <i class="fas fa-arrow-right"></i> ڤەگەر
-        </button>
-        <div class="food-grid" id="foodGrid"></div>
+    <div class="nav-btn" onclick="toggleLang()">
+        <i class="fas fa-language fa-lg" style="color: var(--accent);"></i>
     </div>
 </div>
 
+<header><h1>TECH REST</h1></header>
+
+<div id="lang-modal" onclick="toggleLang()">
+    <div class="lang-card" onclick="event.stopPropagation()">
+        <h3 id="lang-title">Select Language</h3>
+        <div style="cursor:pointer; padding:10px;" onclick="setLang('en')">English</div>
+        <div style="cursor:pointer; padding:10px;" onclick="setLang('ku')">کوردی</div>
+        <div style="cursor:pointer; padding:10px;" onclick="setLang('ar')">العربية</div>
+    </div>
+</div>
+
+<div id="cart-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 id="cart-title">My Cart</h2>
+        <i class="fas fa-times fa-lg" onclick="toggleCart()"></i>
+    </div>
+    
+    <div id="cart-list"></div>
+
+    <div id="checkout-form" style="display:none; border-top: 1px solid #444; padding-top:10px;">
+        <div style="display:flex; gap:5px; margin-bottom:10px;">
+            <button onclick="setService('outside')" id="btn-out" style="flex:1; padding:8px; border-radius:5px;">دەرڤە</button>
+            <button onclick="setService('inside')" id="btn-in" style="flex:1; padding:8px; border-radius:5px;">ناڤدا</button>
+        </div>
+        <div id="fields-outside" style="display:none;">
+            <input type="text" id="addr" class="input-field" placeholder="ناڤنیشان">
+            <input type="number" id="phone" class="input-field" placeholder="مۆبایل">
+        </div>
+        <div id="fields-inside" style="display:none;">
+            <input type="number" id="table" class="input-field" placeholder="ژمارا مێزێ">
+        </div>
+        <h3 style="text-align:center;">Total: <span id="total-price" style="color:var(--accent)">0</span></h3>
+        <button class="checkout-btn" onclick="sendToFirebase()">ناردن بۆ کاشێری</button>
+    </div>
+</div>
+
+<div class="categories-container" id="catBar"></div>
+<div id="menuContent"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
 <script>
+    // --- لێرە کۆدێ Config یێ Firebase دانی ---
+    const firebaseConfig = { apiKey: "YOUR_API", databaseURL: "YOUR_URL", projectId: "YOUR_ID" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTSRjwZs-DPmh8Cg7LwOa1HTa8m58e4LriIPHbkoxdNp-vcgkNHHsVnp89Dj_TE7xiDLMugKBJRtsBr/pub?output=csv';
-    let dataList = [];
+    let dataList = [], cart = [], currentLang = 'ku', serviceType = '';
+
+    const translations = {
+        en: { cart: "My Cart", empty: "Empty", total: "Total", langTitle: "Select Language" },
+        ku: { cart: "سەلکا من", empty: "سەلک ڤالایە", total: "کۆم", langTitle: "زمان هەلبژێرە" },
+        ar: { cart: "سلتي", empty: "فارغة", total: "المجموع", langTitle: "اختر اللغة" }
+    };
 
     async function loadData() {
-        try {
-            const res = await fetch(csvUrl);
-            const txt = await res.text();
-            const rows = txt.split('\n').slice(1);
-            
-            dataList = rows.map(r => {
-                const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g, '').trim());
-                return { name: c[0], price: c[1], img: c[2], cat: c[3], catImg: c[4] };
-            }).filter(item => item.cat && item.name);
-
-            document.getElementById('loader').style.display = 'none';
-            renderCategories();
-        } catch(e) {
-            console.error("Error loading CSV:", e);
-        }
+        const res = await fetch(csvUrl);
+        const txt = await res.text();
+        const rows = txt.split('\n').slice(1);
+        dataList = rows.map(r => {
+            const c = r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/"/g, '').trim());
+            return { name_en: c[0], price: c[1], img: c[2], cat: c[3], name_ku: c[4] || c[0], name_ar: c[5] || c[0] };
+        }).filter(i => i.cat);
+        setLang('ku');
     }
 
-    function renderCategories() {
-        const catGrid = document.getElementById('catGrid');
-        catGrid.style.display = 'grid';
-        document.getElementById('foodSection').style.display = 'none';
-        
-        const categories = [...new Set(dataList.map(item => item.cat))];
-        catGrid.innerHTML = '';
-        
-        categories.forEach(cat => {
-            const item = dataList.find(i => i.cat === cat);
-            catGrid.innerHTML += `
-                <div class="cat-card" onclick="openCat('${cat}')">
-                    <img src="${item.catImg}" class="cat-img">
-                    <div class="cat-overlay"><h3>${cat}</h3></div>
-                </div>`;
+    function setLang(l) {
+        currentLang = l;
+        document.getElementById('mainHtml').dir = (l === 'en') ? 'ltr' : 'rtl';
+        document.getElementById('cart-title').innerText = translations[l].cart;
+        renderMenu(); updateCartUI(); toggleLang(false);
+    }
+
+    function renderMenu() {
+        const catBar = document.getElementById('catBar');
+        const menuContent = document.getElementById('menuContent');
+        catBar.innerHTML = ''; menuContent.innerHTML = '';
+        const cats = [...new Set(dataList.map(i => i.cat))];
+        cats.forEach((cat, index) => {
+            const btn = document.createElement('div');
+            btn.className = `cat-btn ${index === 0 ? 'active' : ''}`;
+            btn.innerText = cat;
+            btn.onclick = () => switchCat(cat, btn);
+            catBar.appendChild(btn);
+            const section = document.createElement('div');
+            section.id = `section-${cat}`;
+            section.className = `menu-section ${index === 0 ? 'active' : ''}`;
+            const grid = document.createElement('div');
+            grid.className = 'food-grid';
+            dataList.filter(f => f.cat === cat).forEach(food => {
+                const card = document.createElement('div');
+                card.className = 'food-card';
+                card.innerHTML = `<button class="add-btn" onclick="addToCart('${food.name_en}')"><i class="fas fa-plus"></i></button>
+                    <div class="food-img" style="background-image: url('${food.img}')"></div>
+                    <div class="food-info"><h3>${food[`name_${currentLang}`]}</h3><span class="price-tag">${food.price}</span></div>`;
+                grid.appendChild(card);
+            });
+            section.appendChild(grid);
+            menuContent.appendChild(section);
         });
     }
 
-    function openCat(catName) {
-        document.getElementById('catGrid').style.display = 'none';
-        document.getElementById('foodSection').style.display = 'block';
-        const grid = document.getElementById('foodGrid');
-        grid.innerHTML = '';
-        
-        dataList.filter(item => item.cat === catName).forEach(item => {
-            grid.innerHTML += `
-                <div class="food-card">
-                    <img src="${item.img}" class="food-photo">
-                    <div class="food-info">
-                        <h3>${item.name}</h3>
-                        <span class="price-tag">${item.price}</span>
-                    </div>
-                </div>`;
-        });
-        window.scrollTo(0,0);
+    function switchCat(cat, btn) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(`section-${cat}`).classList.add('active');
     }
 
-    function showCats() {
-        document.getElementById('catGrid').style.display = 'grid';
-        document.getElementById('foodSection').style.display = 'none';
-        window.scrollTo(0,0);
+    // --- کێشەیا دووبارەبوونێ لێرە چارەسەر بوو ---
+    function addToCart(nameEn) {
+        const item = dataList.find(i => i.name_en === nameEn);
+        const exist = cart.find(i => i.name_en === nameEn);
+        if (exist) { exist.qty++; } else { cart.push({ ...item, qty: 1 }); }
+        updateCartUI();
     }
+
+    function removeFromCart(i) { cart.splice(i, 1); updateCartUI(); }
+
+    function updateCartUI() {
+        const list = document.getElementById('cart-list');
+        const count = document.getElementById('cart-count');
+        const priceEl = document.getElementById('total-price');
+        const form = document.getElementById('checkout-form');
+
+        count.innerText = cart.reduce((s, i) => s + i.qty, 0);
+        list.innerHTML = cart.length === 0 ? `<p style="text-align:center">ڤالایە</p>` : '';
+        form.style.display = cart.length > 0 ? 'block' : 'none';
+
+        let total = 0;
+        cart.forEach((item, index) => {
+            const p = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+            total += (p * item.qty);
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `<span>${item[`name_${currentLang}`]} (x${item.qty})</span>
+                <span>${(p * item.qty).toLocaleString()} <i class="fas fa-trash" onclick="removeFromCart(${index})" style="color:red; margin-left:10px"></i></span>`;
+            list.appendChild(div);
+        });
+        priceEl.innerText = total.toLocaleString() + " IQD";
+    }
+
+    function setService(t) {
+        serviceType = t;
+        document.getElementById('fields-outside').style.display = t === 'outside' ? 'block' : 'none';
+        document.getElementById('fields-inside').style.display = t === 'inside' ? 'block' : 'none';
+        document.getElementById('btn-out').style.background = t === 'outside' ? 'var(--primary)' : '#333';
+        document.getElementById('btn-in').style.background = t === 'inside' ? 'var(--primary)' : '#333';
+    }
+
+    function sendToFirebase() {
+        if (!serviceType) return alert("جۆرێ خزمەتێ هەلبژێرە");
+        const order = {
+            items: cart,
+            total: document.getElementById('total-price').innerText,
+            type: serviceType,
+            details: serviceType === 'inside' ? { table: document.getElementById('table').value } : { addr: document.getElementById('addr').value, phone: document.getElementById('phone').value },
+            time: new Date().toLocaleTimeString()
+        };
+        db.ref('orders').push(order).then(() => { alert("گەهشتە کاشێری!"); cart = []; updateCartUI(); toggleCart(); });
+    }
+
+    function toggleCart() { document.getElementById('cart-panel').classList.toggle('open'); }
+    function toggleLang(s = true) { document.getElementById('lang-modal').style.display = s ? 'flex' : 'none'; }
 
     loadData();
 </script>
